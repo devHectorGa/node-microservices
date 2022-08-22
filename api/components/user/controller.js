@@ -1,9 +1,34 @@
-const store = require('../../../store/dummy');
+const { nanoid } = require('nanoid');
+const auth = require('../auth');
 
-const TABLA = 'user';
+const TABLE = 'user';
 
-function list() {
-  return store.list(TABLA);
-}
+module.exports = function (injectedStore) {
+  const store = injectedStore || require('../../../store/dummy');
 
-module.exports = { list };
+  function list() {
+    return store.list(TABLE);
+  }
+  function get(id) {
+    return store.get(TABLE, id);
+  }
+  function upsert(data) {
+    const user = {
+      name: data?.name,
+      username: data?.username,
+      id: nanoid(),
+    };
+    if (data?.username || data.password) {
+      auth.upsert({
+        id: user.id,
+        username: data?.username,
+        password: data?.password,
+      });
+    }
+    return store.upsert(TABLE, user);
+  }
+  function remove(id) {
+    return store.remove(TABLE, id);
+  }
+  return { list, get, upsert, remove };
+};

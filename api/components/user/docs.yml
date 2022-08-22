@@ -1,0 +1,7 @@
+info:
+  title: Users
+paths:
+  /user:
+    get:
+      tags:
+        - user
