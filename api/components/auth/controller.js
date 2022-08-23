@@ -11,9 +11,11 @@ module.exports = function (injectedStore) {
   async function upsert(data) {
     const authData = {
       username: data?.username,
-      password: bcrypt.hashSync(data?.password, bcrypt.genSaltSync()),
       id: data?.id || nanoid(),
     };
+    if (data?.password) {
+      authData.password = bcrypt.hashSync(data?.password, bcrypt.genSaltSync());
+    }
     return store.upsert(TABLE, authData);
   }
   async function login(username, password) {

@@ -11,34 +11,34 @@ router.post('/', upsert);
 router.put('/', secure('update'), upsert);
 router.delete('/:id', deleteFunction);
 
-function list(req, res) {
+function list(req, res, next) {
   Controller.list()
     .then((users) => response.success(req, res, users))
-    .catch((error) => response.error(req, res, error));
+    .catch(next);
 }
 
-function get(req, res) {
+function get(req, res, next) {
   Controller.get(req.params.id)
     .then((user) => {
       response.success(req, res, user);
     })
-    .catch((error) => response.error(req, res, error));
+    .catch(next);
 }
 
-function upsert(req, res) {
+function upsert(req, res, next) {
   Controller.upsert(req.body)
     .then((user) => {
       response.success(req, res, user);
     })
-    .catch((error) => response.error(req, res, error));
+    .catch(next);
 }
 
-function deleteFunction(req, res) {
+function deleteFunction(req, res, next) {
   Controller.remove(req.params.id)
     .then((user) => {
       response.success(req, res, user);
     })
-    .catch((error) => response.error(req, res, error));
+    .catch(next);
 }
 
 module.exports = router;

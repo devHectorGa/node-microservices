@@ -4,7 +4,7 @@ const Controller = require('./index');
 const response = require('../../../network/response');
 const router = express.Router();
 
-router.post('/login', function (req, res) {
+router.post('/login', function (req, res, next) {
   Controller.login(req.body.username, req.body.password)
     .then((token) => {
       if (!token) {
@@ -12,9 +12,7 @@ router.post('/login', function (req, res) {
       }
       response.success(req, res, { token }, 200);
     })
-    .catch((e) => {
-      response.error(req, res, `Unauthorized ${e}`, 401);
-    });
+    .catch(next);
 });
 
 module.exports = router;
