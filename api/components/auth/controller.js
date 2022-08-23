@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const { nanoid } = require('nanoid');
 const { sign } = require('../../../auth');
+const error = require('../../../utils/error');
 
 const TABLE = 'auth';
 
@@ -18,7 +19,7 @@ module.exports = function (injectedStore) {
   async function login(username, password) {
     const data = await store.query(TABLE, { username });
     if (!data || !bcrypt.compareSync(password, data?.password)) {
-      throw new Error('Usuario o contraseña incorrectos');
+      throw error('Usuario o contraseña incorrectos', 401);
     }
     return sign(data);
   }

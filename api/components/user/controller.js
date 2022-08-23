@@ -16,7 +16,7 @@ module.exports = function (injectedStore) {
     const user = {
       name: data?.name,
       username: data?.username,
-      id: nanoid(),
+      id: data?.id || nanoid(),
     };
     if (data?.username || data.password) {
       auth.upsert({

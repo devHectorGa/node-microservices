@@ -23,7 +23,15 @@ async function get(table, id) {
 
 async function upsert(table, data) {
   const collection = await list(table);
-  collection ? collection?.unshift(data) : (db[table] = [data]);
+  const indexItem = collection?.findIndex(filterById(data?.id));
+  let newData = data;
+  if (indexItem >= 0) {
+    newData = { ...collection[indexItem], ...data };
+    collection[indexItem] = newData;
+  } else {
+    collection ? collection?.unshift(newData) : (db[table] = [newData]);
+  }
+  return newData;
 }
 
 async function remove(table, id) {
