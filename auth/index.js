@@ -37,6 +37,12 @@ const check = {
       throw error('No puedes hacer esto', 401);
     }
   },
+  logged: function (req) {
+    const decoded = decodeHeader(req);
+    if (!decoded.id) {
+      throw error('No puedes hacer esto', 401);
+    }
+  },
 };
 
 module.exports = { check, sign };

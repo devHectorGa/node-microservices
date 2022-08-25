@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get('/', list);
 router.get('/:id', get);
+router.post('/follow/:id', secure('follow'), follow);
+router.get('/:id/follow', following);
 router.post('/', upsert);
 router.put('/', secure('update'), upsert);
 router.delete('/:id', deleteFunction);
@@ -38,6 +40,18 @@ function deleteFunction(req, res, next) {
     .then((user) => {
       response.success(req, res, user);
     })
+    .catch(next);
+}
+
+function follow(req, res, next) {
+  Controller.follow(req.user.id, req.params.id)
+    .then((data) => response.success(req, res, data, 200))
+    .catch(next);
+}
+
+function following(req, res, next) {
+  Controller.following(req.params.id)
+    .then((data) => response.success(req, res, data, 200))
     .catch(next);
 }
 

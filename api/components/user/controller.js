@@ -30,5 +30,15 @@ module.exports = function (injectedStore) {
   function remove(id) {
     return store.remove(TABLE, id);
   }
-  return { list, get, upsert, remove };
+  function follow(user_from, user_to) {
+    return store.upsert(`${TABLE}_follow`, { user_from, user_to });
+  }
+  function following(user) {
+    const join = {};
+    join[TABLE] = 'user_to';
+    const query = { user_from: user };
+    return store.query(`${TABLE}_follow`, query, join);
+  }
+
+  return { list, get, upsert, remove, follow, following };
 };

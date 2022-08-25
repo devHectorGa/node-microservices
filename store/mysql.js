@@ -81,7 +81,9 @@ async function update(table, data) {
 }
 
 async function upsert(table, data) {
-  if (data && data.id) {
+  let row = [];
+  if (data?.id) row = await get(table, data?.id);
+  if (row?.length) {
     return update(table, data);
   } else {
     return insert(table, data);
@@ -90,14 +92,21 @@ async function upsert(table, data) {
 
 async function remove(table, id) {}
 
-async function query(table, conditions) {
+async function query(table, conditions, join) {
+  let joinQuery = '';
+  if (join) {
+    const key = Object.keys(join)[0];
+    const val = join[key];
+
+    joinQuery = `JOIN ${key} ON ${table}.${val} = ${key}.id`;
+  }
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT * FROM ${table} WHERE ?`,
+      `SELECT * FROM ${table} ${joinQuery} WHERE ?`,
       conditions,
       (err, result) => {
         if (err) return reject(err);
-        resolve(result[0] || null);
+        resolve(result || null);
       }
     );
   });
