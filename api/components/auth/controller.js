@@ -20,7 +20,7 @@ module.exports = function (injectedStore) {
   }
   async function login(username, password) {
     const data = await store.query(TABLE, { username });
-    if (!data || !bcrypt.compareSync(password, data?.password)) {
+    if (!data[0] || !bcrypt.compareSync(password, data[0]?.password)) {
       throw error('Usuario o contraseña incorrectos', 401);
     }
     return sign(data);

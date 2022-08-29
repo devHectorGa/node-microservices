@@ -94,7 +94,7 @@ async function remove(table, id) {}
 
 async function query(table, conditions, join) {
   let joinQuery = '';
-  if (join) {
+  if (Object.entries(join).length) {
     const key = Object.keys(join)[0];
     const val = join[key];
 

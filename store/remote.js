@@ -1,14 +1,19 @@
-const { response, json } = require('express');
 const fetch = require('node-fetch');
 const { error } = require('../network/response');
-const config = require('../config');
 
 function createRemoteDB(host, port) {
   const URL = `http://${host}:${port}`;
 
-  function req(url, options) {
+  function req(url, body, options) {
+    console.log(options);
     return new Promise((resolve, reject) => {
-      fetch(url, options)
+      fetch(url, {
+        headers: {
+          'content-type': 'application/json',
+        },
+        ...options,
+        ...(body && { body: JSON.stringify(body) }),
+      })
         .then((response) => response.json())
         .then((json) => resolve(json.body))
         .catch((err) => reject(err.message));
@@ -22,13 +27,13 @@ function createRemoteDB(host, port) {
     return req(`${URL}/${table}/${id}`);
   }
   function upsert(table, data) {
-    return req(`${URL}/${table}`, { method: 'PUT', body: data });
+    return req(`${URL}/${table}`, data, { method: 'PUT' });
   }
   function insert(table, data) {
-    return req(`${URL}/${table}`, { method: 'POST', body: data });
+    return req(`${URL}/${table}`, data, { method: 'POST' });
   }
-  function query(table, query, join) {
-    return req(`${URL}/${table}`, { method: 'POST', body: { query, join } });
+  function query(table, query = {}, join = {}) {
+    return req(`${URL}/${table}/query`, { query, join }, { method: 'POST' });
   }
 
   return { list, get, insert, upsert, query };

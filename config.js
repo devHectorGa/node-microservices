@@ -17,4 +17,7 @@ module.exports = {
     host: process.env.MYSQL_SERVICE_HOST,
     port: process.env.MYSQL_SERVICE_PORT,
   },
+  post: {
+    port: process.env.POST_SERVICE_PORT,
+  },
 };

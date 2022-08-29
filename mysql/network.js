@@ -21,7 +21,7 @@ async function get(req, res, next) {
     .catch(next);
 }
 async function insert(req, res, next) {
-  Store.insert(req.params.table, req.body)
+  Store.upsert(req.params.table, req.body)
     .then((data) => response.success(req, res, data, 200))
     .catch(next);
 }
@@ -31,6 +31,7 @@ async function upsert(req, res, next) {
     .catch(next);
 }
 async function query(req, res, next) {
+  console.log('Network ', req.params.table);
   Store.query(req.params.table, req.body.query, req.body.join)
     .then((data) => response.success(req, res, data, 200))
     .catch(next);
