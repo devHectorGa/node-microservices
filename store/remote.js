@@ -5,7 +5,6 @@ function createRemoteDB(host, port) {
   const URL = `http://${host}:${port}`;
 
   function req(url, body, options) {
-    console.log(options);
     return new Promise((resolve, reject) => {
       fetch(url, {
         headers: {

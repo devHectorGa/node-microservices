@@ -17,6 +17,14 @@ module.exports = {
     host: process.env.MYSQL_SERVICE_HOST,
     port: process.env.MYSQL_SERVICE_PORT,
   },
+  cacheService: {
+    host: process.env.CACHE_SERVICE_HOST,
+    port: process.env.CACHE_SERVICE_PORT,
+    dbUser: process.env.CACHE_SERVICE_DB_USER,
+    dbPass: process.env.CACHE_SERVICE_DB_PASS,
+    dbHost: process.env.CACHE_SERVICE_DB_HOST,
+    dbPort: process.env.CACHE_SERVICE_DB_PORT,
+  },
   post: {
     port: process.env.POST_SERVICE_PORT,
   },
